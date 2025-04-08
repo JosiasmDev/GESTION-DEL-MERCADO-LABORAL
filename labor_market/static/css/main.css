@@ -84,3 +84,75 @@ body {
 .logout-form button {
     color: white;
 }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown span {
+    color: white;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--primary-color);
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    padding: 12px 16px;
+    display: block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.job-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.job-card h3 {
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+}
+
+.job-company {
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+.job-location {
+    color: #666;
+    margin: 5px 0;
+}
+
+.job-salary {
+    font-size: 0.9em;
+    color: #28a745;
+    margin: 10px 0;
+}
+
+.job-type {
+    display: inline-block;
+    padding: 4px 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    font-size: 0.8em;
+    margin: 5px 0;
+}

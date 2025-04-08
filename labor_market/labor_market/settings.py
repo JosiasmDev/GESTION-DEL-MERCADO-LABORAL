@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'data_integration',
     'ai_engine',
     'tasks',
+    'jobs',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +151,11 @@ LOGIN_URL = '/users/login/'  # URL completa
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+# Cron jobs
+CRONJOBS = [
+    ('0 0 * * *', 'django.core.management.call_command', ['import_jobs']),
+]
+
+# LinkedIn API settings
+LINKEDIN_ACCESS_TOKEN = 'your_access_token_here'

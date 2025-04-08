@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Importar Ofertas{% endblock %}
+
+{% block content %}
+<div class="import-container">
+    <h2>Importar Ofertas de Trabajo</h2>
+    <form method="post" id="import-form">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">Iniciar Importación</button>
+    </form>
+    <div id="import-status" class="mt-3"></div>
+</div>
+
+<script>
+document.getElementById('import-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = this;
+    const status = document.getElementById('import-status');
+    status.textContent = 'Importando ofertas...';
+    
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+        body: new FormData(form)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            status.textContent = 'Importación completada con éxito';
+            status.className = 'alert alert-success';
+        } else {
+            status.textContent = 'Error: ' + data.message;
+            status.className = 'alert alert-danger';
+        }
+    })
+    .catch(error => {
+        status.textContent = 'Error en la importación: ' + error;
+        status.className = 'alert alert-danger';
+    });
+});
+</script>
+{% endblock %}

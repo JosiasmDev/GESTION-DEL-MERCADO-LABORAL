@@ -18,8 +18,16 @@
                     <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
                     <li><a href="{% url 'tasks:project_list' %}">Proyectos</a></li>
                     <li><a href="{% url 'tasks:task_list' %}">Tareas</a></li>
-                    {% if user.profile.role == 'admin' %}
-                        <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                    <li><a href="{% url 'jobs:job_list' %}">Ofertas de Trabajo</a></li>
+                    {% if user.is_superuser %}
+                        <li class="dropdown">
+                            <span>Administración</span>
+                            <div class="dropdown-content">
+                                <a href="{% url 'admin:index' %}">Panel Admin</a>
+                                <a href="{% url 'data_integration:import_jobs' %}">Importar Ofertas</a>
+                                <a href="{% url 'data_integration:job_stats' %}">Estadísticas</a>
+                            </div>
+                        </li>
                     {% endif %}
                     <li class="user-menu">
                         <span>{{ user.username }}</span>

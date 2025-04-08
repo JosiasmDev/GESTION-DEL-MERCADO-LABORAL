@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Estadísticas de Ofertas{% endblock %}
+
+{% block content %}
+<div class="stats-container">
+    <h2>Estadísticas de Ofertas de Trabajo</h2>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total de Ofertas</h3>
+            <div class="stat-number">{{ total_jobs }}</div>
+        </div>
+        <div class="stat-card">
+            <h3>Ofertas Activas</h3>
+            <div class="stat-number">{{ active_jobs }}</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
