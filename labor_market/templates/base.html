@@ -8,9 +8,31 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
-    <header>
-        <nav>
-            <!-- Navegación aquí -->
+    <header class="main-header">
+        <nav class="nav-container">
+            <div class="logo">
+                <a href="{% url 'dashboard' %}">GML</a>
+            </div>
+            <ul class="nav-links">
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                    <li><a href="{% url 'tasks:project_list' %}">Proyectos</a></li>
+                    <li><a href="{% url 'tasks:task_list' %}">Tareas</a></li>
+                    {% if user.profile.role == 'admin' %}
+                        <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                    {% endif %}
+                    <li class="user-menu">
+                        <span>{{ user.username }}</span>
+                        <form method="post" action="{% url 'users:logout' %}" class="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link">Cerrar sesión</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'users:login' %}">Iniciar Sesión</a></li>
+                    <li><a href="{% url 'users:register' %}">Registro</a></li>
+                {% endif %}
+            </ul>
         </nav>
     </header>
 

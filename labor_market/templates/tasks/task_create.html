@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Nueva Tarea{% endblock %}
+
+{% block content %}
+<div class="task-form">
+    <h2>Crear Nueva Tarea</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Crear Tarea</button>
+            <a href="{% url 'tasks:task_list' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

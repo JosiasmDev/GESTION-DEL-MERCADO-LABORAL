@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Proyectos{% endblock %}
+
+{% block content %}
+<div class="projects-list">
+    <h2>Proyectos</h2>
+    
+    <form class="search-form" method="get">
+        <input type="text" name="search" placeholder="Buscar proyectos...">
+        <button type="submit">Buscar</button>
+    </form>
+
+    <div class="projects-grid">
+        {% for project in projects %}
+            <div class="project-card">
+                <h3>{{ project.name }}</h3>
+                <p>{{ project.description|truncatewords:30 }}</p>
+                <div class="project-dates">
+                    <span>Inicio: {{ project.start_date }}</span>
+                    <span>Fin: {{ project.end_date }}</span>
+                </div>
+                <div class="project-tasks">
+                    Tareas: {{ project.tasks.count }}
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay proyectos disponibles.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

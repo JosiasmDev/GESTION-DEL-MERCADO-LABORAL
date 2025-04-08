@@ -7,7 +7,10 @@
     <h1>Bienvenido, {{ user.username }}</h1>
     <div class="dashboard-content">
         <p>Panel de control</p>
-        <a href="{% url 'users:logout' %}">Cerrar sesión</a>
+        <form method="post" action="{% url 'users:logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link">Cerrar sesión</button>
+        </form>
     </div>
 </div>
 {% endblock %}

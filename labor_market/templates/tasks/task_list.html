@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Tareas{% endblock %}
+
+{% block content %}
+<div class="tasks-list">
+    <h2>Lista de Tareas</h2>
+    
+    <div class="filters">
+        <form method="get">
+            <select name="status">
+                <option value="">Estado</option>
+                {% for status, label in view.model.STATUS_CHOICES %}
+                <option value="{{ status }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+            <select name="priority">
+                <option value="">Prioridad</option>
+                {% for priority, label in view.model.PRIORITY_CHOICES %}
+                <option value="{{ priority }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Filtrar</button>
+        </form>
+    </div>
+
+    <div class="tasks-grid">
+        {% for task in tasks %}
+            <div class="task-card priority-{{ task.priority }}">
+                <h3>{{ task.title }}</h3>
+                <p>{{ task.description|truncatewords:20 }}</p>
+                <div class="task-meta">
+                    <span class="status">{{ task.get_status_display }}</span>
+                    <span class="deadline">Límite: {{ task.deadline|date:"d/m/Y" }}</span>
+                </div>
+            </div>
+        {% empty %}
+            <p>No hay tareas disponibles.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
