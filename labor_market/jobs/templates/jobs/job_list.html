@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Ofertas de Trabajo</h1>
+        {% if jobs_count > 0 %}
+        <button id="deleteAllBtn" class="btn btn-danger">
+            <i class="fas fa-trash"></i> Eliminar Todas ({{ jobs_count }})
+        </button>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        {% for job in jobs %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ job.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ job.company }}</h6>
+                    <p class="card-text">{{ job.description|truncatewords:30 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Publicado: {{ job.date_posted|date:"d/m/Y" }}</small>
+                        <button class="btn btn-sm btn-danger delete-job" data-job-id="{{ job.id }}">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                No hay ofertas de trabajo disponibles.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Función para eliminar un trabajo individual
+    function deleteJob(jobId) {
+        if (confirm('¿Estás seguro de que deseas eliminar esta oferta de trabajo?')) {
+            fetch(`{% url 'jobs:job_delete' pk=0 %}`.replace('0', jobId), {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    location.reload();
+                } else {
+                    alert('Error al eliminar: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar la oferta de trabajo');
+            });
+        }
+    }
+
+    // Función para eliminar todos los trabajos
+    function deleteAllJobs() {
+        if (confirm('¿Estás seguro de que deseas eliminar todas las ofertas de trabajo?')) {
+            fetch('{% url "jobs:job_bulk_delete" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    location.reload();
+                } else {
+                    alert('Error al eliminar: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar las ofertas de trabajo');
+            });
+        }
+    }
+
+    // Agregar event listeners
+    document.querySelectorAll('.delete-job').forEach(button => {
+        button.addEventListener('click', function() {
+            const jobId = this.dataset.jobId;
+            deleteJob(jobId);
+        });
+    });
+
+    const deleteAllBtn = document.getElementById('deleteAllBtn');
+    if (deleteAllBtn) {
+        deleteAllBtn.addEventListener('click', deleteAllJobs);
+    }
+
+    // Función auxiliar para obtener el token CSRF
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+</script>
+{% endblock %} 
